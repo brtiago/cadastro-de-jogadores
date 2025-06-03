@@ -1,10 +1,8 @@
 package com.example.cadastro_de_jogadores.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Grupo {
@@ -13,6 +11,8 @@ public class Grupo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank
+    @Column(unique = true)
     private String nome;
+    @Size(max = 100)
     private String descricao;
 }
