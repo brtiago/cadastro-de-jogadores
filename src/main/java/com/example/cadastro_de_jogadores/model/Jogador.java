@@ -31,7 +31,7 @@ public class Jogador {
     @NotBlank
     @Size(max = 50)
     private String telefone;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Grupo grupo;
     @CreationTimestamp
