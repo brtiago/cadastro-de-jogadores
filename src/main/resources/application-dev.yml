@@ -1,9 +1,9 @@
 spring:
   application:
-    name: Helpdesk
+    name: Cadastro de Jogadores
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/helpdesk
+    url: jdbc:postgresql://localhost:5432/testdb
     username: sa
     password: ""
 
