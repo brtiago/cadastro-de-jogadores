@@ -26,7 +26,6 @@ public class Jogador {
     @Column(unique = true)
     @Size(max = 50)
     private String codinome;
-    @NotBlank
     @Size(max = 50)
     private String telefone;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -34,4 +33,19 @@ public class Jogador {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
     private boolean ativo = true;
+
+
+    public Jogador(JogadorDTO jogadorDTO) {
+        this.id = jogadorDTO.id();
+        this.nome = jogadorDTO.nome();
+        this.email = jogadorDTO.email();
+        this.codinome = jogadorDTO.codinome();
+        this.telefone = jogadorDTO.telefone();
+        this.ativo = jogadorDTO.ativo();
+    }
+
+    public Jogador() {
+
+    }
+
 }
