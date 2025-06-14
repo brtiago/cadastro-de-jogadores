@@ -15,7 +15,7 @@ public class WebClientConfig {
     public WebClient webclient() {
 
         HttpClient httpClient = HttpClient.create()
-                .responseTimeout(Duration.ofSeconds(5));
+                .responseTimeout(Duration.ofSeconds(3));
 
         return WebClient.builder()
                 .baseUrl("https://raw.githubusercontent.com")
