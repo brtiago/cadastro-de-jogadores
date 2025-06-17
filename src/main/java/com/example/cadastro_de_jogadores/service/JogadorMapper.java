@@ -1,5 +1,6 @@
 package com.example.cadastro_de_jogadores.service;
 
+import com.example.cadastro_de_jogadores.model.Grupo;
 import com.example.cadastro_de_jogadores.model.Jogador;
 import com.example.cadastro_de_jogadores.model.JogadorDTO;
 
@@ -20,12 +21,17 @@ public class JogadorMapper {
 
     public static Jogador toEntity(JogadorDTO jogadorDTO) {
         Jogador jogador = new Jogador();
+        jogador.setId(jogadorDTO.id());
         jogador.setNome(jogadorDTO.nome());
         jogador.setEmail(jogadorDTO.email());
         jogador.setTelefone(jogadorDTO.telefone());
-        jogador.setCodinome(jogadorDTO.nome());
+        jogador.setCodinome(jogadorDTO.codinome());
         jogador.setAtivo(jogadorDTO.ativo());
 
         return jogador;
+    }
+
+    private static String extrairNomeGrupo(Grupo grupo) {
+        return (grupo != null) ? grupo.getNome() : "Sem grupo";
     }
 }
