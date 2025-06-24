@@ -24,3 +24,16 @@ src/
 | Repository | JogadorRepository.java |	Spring Data JPA|
 | Service | JogadorService.java	Spring | (@Service)|
 | Controller |	JogadorController.java	| Spring (@RestController)|
+
+### Diagrama de componentes atual
+
+```mermaid
+flowchart TD
+A[Frontend] -->|HTTP| B[JogadorController]
+B --> C[JogadorService]
+C --> D[JogadorRepository]
+C --> E[CodinomeService]
+E -->|HTTP| F[API Vingadores]
+E -->|HTTP| G[API Liga da Justiça]
+D --> H[H2 Database]
+```
