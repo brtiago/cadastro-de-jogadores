@@ -2,7 +2,7 @@ package com.example.cadastro_de_jogadores.service;
 
 import com.example.cadastro_de_jogadores.model.Grupo;
 import com.example.cadastro_de_jogadores.model.Jogador;
-import com.example.cadastro_de_jogadores.model.JogadorDTO;
+import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 
 public class JogadorMapper {
 
