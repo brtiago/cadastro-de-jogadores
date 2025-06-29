@@ -1,5 +1,6 @@
 package com.example.cadastro_de_jogadores.model;
 
+import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
