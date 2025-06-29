@@ -1,10 +1,11 @@
 package com.example.cadastro_de_jogadores.service;
 
-import com.example.cadastro_de_jogadores.model.JogadorDTO;
+import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
+import com.example.cadastro_de_jogadores.model.dto.JogadorRequest;
 import com.example.cadastro_de_jogadores.repository.JogadorRepository;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
@@ -28,5 +29,8 @@ public class JogadorService {
     }
 
 
-
+    // TODO: fazer método criar
+    public JogadorDTO criar(@Valid JogadorRequest request) {
+        return null;
+    }
 }
