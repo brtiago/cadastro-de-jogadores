@@ -1,4 +1,4 @@
-package com.example.cadastro_de_jogadores.model;
+package com.example.cadastro_de_jogadores.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
