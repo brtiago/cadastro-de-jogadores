@@ -28,23 +28,11 @@ public class Jogador {
     private String telefone;
     @ManyToOne(fetch = FetchType.LAZY)
     private Grupo grupo;
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
     private boolean ativo = true;
 
-
-    public Jogador(JogadorDTO jogadorDTO) {
-        this.id = jogadorDTO.id();
-        this.nome = jogadorDTO.nome();
-        this.email = jogadorDTO.email();
-        this.codinome = jogadorDTO.codinome();
-        this.telefone = jogadorDTO.telefone();
-        this.ativo = jogadorDTO.ativo();
-    }
-
-    public Jogador() {
-
-    }
+    public Jogador() {}
 
 
 
@@ -110,13 +98,14 @@ public class Jogador {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Jogador jogador = (Jogador) o;
-        return ativo == jogador.ativo && Objects.equals(id, jogador.id) && Objects.equals(nome, jogador.nome) && Objects.equals(email, jogador.email) && Objects.equals(codinome, jogador.codinome) && Objects.equals(telefone, jogador.telefone) && Objects.equals(grupo, jogador.grupo) && Objects.equals(createdAt, jogador.createdAt);
+        return Objects.equals(id, jogador.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, email, codinome, telefone, grupo, createdAt, ativo);
+        return Objects.hash(id);
     }
 }
