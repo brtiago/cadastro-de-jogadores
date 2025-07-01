@@ -4,6 +4,7 @@ import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 import com.example.cadastro_de_jogadores.model.dto.JogadorRequest;
 import com.example.cadastro_de_jogadores.repository.GrupoRepository;
 import com.example.cadastro_de_jogadores.repository.JogadorRepository;
+import com.example.cadastro_de_jogadores.service.exception.EmailJaExisteException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
