@@ -1,4 +1,4 @@
-package com.example.cadastro_de_jogadores.controller;
+package com.example.cadastro_de_jogadores.model.dto.response;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
