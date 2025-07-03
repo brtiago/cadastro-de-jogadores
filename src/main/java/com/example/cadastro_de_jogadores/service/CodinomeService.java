@@ -2,7 +2,10 @@ package com.example.cadastro_de_jogadores.service;
 
 import com.example.cadastro_de_jogadores.controller.LigaDaJusticaResponse;
 import com.example.cadastro_de_jogadores.controller.VingadorResponse;
+import com.example.cadastro_de_jogadores.model.TipoGrupo;
+import com.example.cadastro_de_jogadores.repository.JogadorRepository;
 import com.example.cadastro_de_jogadores.service.exception.ApiExternaException;
+import com.example.cadastro_de_jogadores.service.exception.CodinomeIndisponivelException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,15 +14,45 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 @Service
 @Slf4j
 public class CodinomeService {
 
     private final WebClient webClient;
+    private final JogadorRepository jogadorRepository;
 
-    public CodinomeService(WebClient webClient) {
+    public CodinomeService(WebClient webClient, JogadorRepository jogadorRepository) {
         this.webClient = webClient;
+        this.jogadorRepository = jogadorRepository;
+    }
+
+    public Mono<String> obterCodinomeDisponivel(TipoGrupo tipoGrupo) {
+        return switch (tipoGrupo) {
+            case LIGA_DA_JUSTICA -> obterCodinomeDisponivelLiga();
+            case VINGADORES -> obterCodinomeDisponivelVingadores();
+        };
+    }
+
+    private Mono<String> obterCodinomeDisponivelLiga() {
+        return getCodinomeLigaDaJustica()
+                .flatMap(codinomes -> {
+                    Set<String> codinomesUsados = jogadorRepository.findCodinomeByGrupoNome("Liga da Justiça");
+                    List<String> disponiveis = codinomes.stream()
+                            .filter(c -> !codinomesUsados.contains(c))
+                            .toList();
+                    if(disponiveis.isEmpty()) {
+                        return Mono.error(new CodinomeIndisponivelException("Não há codinomes disponíveis na Liga da Justiça"));
+                    }
+
+                    return Mono.just(disponiveis.get(new Random().nextInt(disponiveis.size())));
+                });
+    }
+
+    private Mono<String> obterCodinomeDisponivelVingadores() {
+        return null;
     }
 
     public Mono<List<String>> getCodinomeLigaDaJustica() {
