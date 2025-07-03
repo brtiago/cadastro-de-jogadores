@@ -1,5 +1,7 @@
 package com.example.cadastro_de_jogadores.model;
 
+import java.util.Arrays;
+
 public enum TipoGrupo {
     LIGA_DA_JUSTICA("Liga da Justiça"),
     VINGADORES("Vingadores");
@@ -12,5 +14,12 @@ public enum TipoGrupo {
 
     public String getNome() {
         return nome;
+    }
+
+    public static TipoGrupo fromNome(String nome) {
+        return Arrays.stream(values())
+                .filter(tipo -> tipo.getNome().equals(nome))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Tipo de grupo inválido: " + nome));
     }
 }
