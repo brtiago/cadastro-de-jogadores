@@ -1,7 +1,7 @@
 package com.example.cadastro_de_jogadores.service;
 
-import com.example.cadastro_de_jogadores.controller.LigaDaJusticaResponse;
-import com.example.cadastro_de_jogadores.controller.VingadorResponse;
+import com.example.cadastro_de_jogadores.model.dto.response.LigaDaJusticaResponse;
+import com.example.cadastro_de_jogadores.model.dto.response.VingadorResponse;
 import com.example.cadastro_de_jogadores.model.TipoGrupo;
 import com.example.cadastro_de_jogadores.repository.JogadorRepository;
 import com.example.cadastro_de_jogadores.service.exception.ApiExternaException;
@@ -52,7 +52,19 @@ public class CodinomeService {
     }
 
     private Mono<String> obterCodinomeDisponivelVingadores() {
-        return null;
+        return getCodinomeVingadores()
+                .flatMap(codinomes -> {
+                    Set<String> codinomesUsados = jogadorRepository.findCodinomeByGrupoNome("Liga da Justiça");
+                    List<String> disponiveis = codinomes.stream()
+                            .filter(c -> !codinomesUsados.contains(c))
+                            .toList();
+                    if (disponiveis.isEmpty()) {
+                        return Mono.error(new CodinomeIndisponivelException(
+                                "Não há codinomes disponíveis nos Vingadores"));
+                    }
+
+                    return Mono.just(disponiveis.get(new Random().nextInt(disponiveis.size())));
+                });
     }
 
     public Mono<List<String>> getCodinomeLigaDaJustica() {
