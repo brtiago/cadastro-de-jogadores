@@ -3,6 +3,7 @@ package com.example.cadastro_de_jogadores.service;
 import com.example.cadastro_de_jogadores.model.Grupo;
 import com.example.cadastro_de_jogadores.model.Jogador;
 import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
+import com.example.cadastro_de_jogadores.model.dto.JogadorRequest;
 
 public class JogadorMapper {
 
@@ -30,6 +31,20 @@ public class JogadorMapper {
 
         return jogador;
     }
+
+
+    public static Jogador fromRequest(
+            JogadorRequest request, String codinome, Grupo grupo) {
+        Jogador jogador = new Jogador();
+        jogador.setNome(request.nome());
+        jogador.setEmail(request.email());
+        jogador.setTelefone(request.telefone());
+        jogador.setCodinome(codinome);
+        jogador.setGrupo(grupo);
+
+        return jogador;
+    }
+
 
     private static String extrairNomeGrupo(Grupo grupo) {
         return (grupo != null) ? grupo.getNome() : "Sem grupo";
