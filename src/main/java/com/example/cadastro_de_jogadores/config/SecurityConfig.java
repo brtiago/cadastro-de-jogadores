@@ -13,15 +13,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll() // Libera o H2
-                        .anyRequest().authenticated() // Resto da API exige autenticação
+                        .requestMatchers("/h2-console/**").permitAll()  // Libera o H2 Console
+                        .requestMatchers("/api/v1/jogadores/**").permitAll()  // Libera sua API
+                        .anyRequest().authenticated()  // Restante exige autenticação
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**") // Desativa CSRF para H2
+                        .ignoringRequestMatchers("/h2-console/**")  // Desativa CSRF para H2
+                        .ignoringRequestMatchers("/api/v1/jogadores/**")  // Desativa CSRF para sua API
                 )
                 .headers(headers -> headers
-                        .frameOptions().disable() // Permite iframes do H2
+                        .frameOptions().disable()  // Permite iframes do H2
                 );
+
         return http.build();
     }
 }
