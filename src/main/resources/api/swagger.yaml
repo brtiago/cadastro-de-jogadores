@@ -1,0 +1,384 @@
+openapi: 3.0.3
+info:
+  title: Sistema de Cadastro de Jogadores
+  description: |
+    API para cadastro e gerenciamento de jogadores com codinomes dos Vingadores e Liga da Justiça.
+    
+    ## Funcionalidades
+    - Cadastro de jogadores com codinomes únicos
+    - Integração com APIs externas para obter codinomes
+    - Validação de email único
+    - Gerenciamento de grupos (Vingadores e Liga da Justiça)
+    
+    ## Arquitetura
+    O sistema utiliza Spring Boot com arquitetura MVC, integrando-se com APIs externas
+    para obter codinomes disponíveis e garantindo que não haja duplicação.
+
+  version: 1.0.0
+  contact:
+    name: Equipe de Desenvolvimento
+    email: dev@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080
+    description: Ambiente de desenvolvimento
+  - url: https://api.jogadores.com
+    description: Ambiente de produção
+
+tags:
+  - name: Jogadores
+    description: Operações relacionadas ao cadastro e listagem de jogadores
+  - name: Grupos
+    description: Operações relacionadas aos grupos de jogadores
+
+paths:
+  /api/v1/jogadores:
+    get:
+      tags:
+        - Jogadores
+      summary: Lista todos os jogadores
+      description: Retorna uma lista com todos os jogadores cadastrados no sistema
+      operationId: listarJogadores
+      responses:
+        '200':
+          description: Lista de jogadores retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JogadorDTO'
+              examples:
+                exemplo_lista:
+                  summary: Lista de jogadores
+                  value:
+                    - id: 1
+                      nome: "Bruce Wayne"
+                      email: "bruce@wayne.com"
+                      telefone: "+55 11 99999-9999"
+                      codinome: "Batman"
+                      ativo: true
+                      nomeGrupo: "Liga da Justiça"
+                    - id: 2
+                      nome: "Tony Stark"
+                      email: "tony@stark.com"
+                      telefone: "+55 11 88888-8888"
+                      codinome: "Homem de Ferro"
+                      ativo: true
+                      nomeGrupo: "Vingadores"
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Jogadores
+      summary: Cadastra um novo jogador
+      description: |
+        Cria um novo jogador no sistema com codinome único do grupo selecionado.
+        
+        ### Regras de Negócio:
+        - Email deve ser único no sistema
+        - Codinome será automaticamente atribuído baseado no grupo escolhido
+        - Codinomes são obtidos de APIs externas e não podem ser reutilizados
+
+      operationId: criarJogador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JogadorRequest'
+            examples:
+              exemplo_vingadores:
+                summary: Jogador dos Vingadores
+                value:
+                  nome: "Tony Stark"
+                  email: "tony@stark.com"
+                  telefone: "+55 11 88888-8888"
+                  tipoGrupo: "VINGADORES"
+              exemplo_liga:
+                summary: Jogador da Liga da Justiça
+                value:
+                  nome: "Bruce Wayne"
+                  email: "bruce@wayne.com"
+                  telefone: "+55 11 99999-9999"
+                  tipoGrupo: "LIGA_DA_JUSTICA"
+      responses:
+        '201':
+          description: Jogador criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JogadorDTO'
+              examples:
+                jogador_criado:
+                  summary: Jogador criado
+                  value:
+                    id: 3
+                    nome: "Diana Prince"
+                    email: "diana@themyscira.com"
+                    telefone: "+55 11 77777-7777"
+                    codinome: "Mulher Maravilha"
+                    ativo: true
+                    nomeGrupo: "Liga da Justiça"
+        '400':
+          description: Dados inválidos na requisição
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                email_invalido:
+                  summary: Email inválido
+                  value:
+                    codigo: "VALIDATION_ERROR"
+                    mensagem: "Email deve ter formato válido"
+                    timestamp: "2024-01-15T10:30:00Z"
+                    path: "/api/v1/jogadores"
+        '409':
+          description: Email já existe no sistema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                email_duplicado:
+                  summary: Email já cadastrado
+                  value:
+                    codigo: "EMAIL_JA_EXISTE"
+                    mensagem: "Email já está em uso: tony@stark.com"
+                    timestamp: "2024-01-15T10:30:00Z"
+                    path: "/api/v1/jogadores"
+        '422':
+          description: Codinome indisponível
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                codinomes_esgotados:
+                  summary: Codinomes esgotados
+                  value:
+                    codigo: "CODINOME_INDISPONIVEL"
+                    mensagem: "Não há codinomes disponíveis nos Vingadores"
+                    timestamp: "2024-01-15T10:30:00Z"
+                    path: "/api/v1/jogadores"
+        '503':
+          description: Serviço externo indisponível
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                api_externa_indisponivel:
+                  summary: API externa fora do ar
+                  value:
+                    codigo: "API_EXTERNA_INDISPONIVEL"
+                    mensagem: "Serviço temporariamente indisponível. Tente novamente mais tarde."
+                    timestamp: "2024-01-15T10:30:00Z"
+                    path: "/api/v1/jogadores"
+
+  /api/v1/jogadores/{id}:
+    get:
+      tags:
+        - Jogadores
+      summary: Busca jogador por ID
+      description: Retorna um jogador específico baseado no ID fornecido
+      operationId: buscarJogadorPorId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID único do jogador
+          schema:
+            type: integer
+            format: int32
+            example: 1
+      responses:
+        '200':
+          description: Jogador encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JogadorDTO'
+        '404':
+          description: Jogador não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    JogadorRequest:
+      type: object
+      required:
+        - nome
+        - email
+        - tipoGrupo
+      properties:
+        nome:
+          type: string
+          maxLength: 20
+          description: Nome completo do jogador
+          example: "Bruce Wayne"
+        email:
+          type: string
+          format: email
+          maxLength: 50
+          description: Email único do jogador
+          example: "bruce@wayne.com"
+        telefone:
+          type: string
+          maxLength: 20
+          description: Número de telefone (opcional)
+          example: "+55 11 99999-9999"
+        tipoGrupo:
+          $ref: '#/components/schemas/TipoGrupo'
+      example:
+        nome: "Diana Prince"
+        email: "diana@themyscira.com"
+        telefone: "+55 11 77777-7777"
+        tipoGrupo: "LIGA_DA_JUSTICA"
+
+    JogadorDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID único do jogador
+          example: 1
+        nome:
+          type: string
+          maxLength: 20
+          description: Nome completo do jogador
+          example: "Bruce Wayne"
+        email:
+          type: string
+          format: email
+          maxLength: 50
+          description: Email único do jogador
+          example: "bruce@wayne.com"
+        telefone:
+          type: string
+          maxLength: 20
+          description: Número de telefone
+          example: "+55 11 99999-9999"
+        codinome:
+          type: string
+          maxLength: 50
+          description: Codinome único atribuído automaticamente
+          example: "Batman"
+        ativo:
+          type: boolean
+          description: Status de ativação do jogador
+          example: true
+        nomeGrupo:
+          type: string
+          description: Nome do grupo do jogador
+          example: "Liga da Justiça"
+      example:
+        id: 1
+        nome: "Bruce Wayne"
+        email: "bruce@wayne.com"
+        telefone: "+55 11 99999-9999"
+        codinome: "Batman"
+        ativo: true
+        nomeGrupo: "Liga da Justiça"
+
+    TipoGrupo:
+      type: string
+      enum:
+        - VINGADORES
+        - LIGA_DA_JUSTICA
+      description: |
+        Tipos de grupo disponíveis:
+        * `VINGADORES` - Grupo dos Vingadores
+        * `LIGA_DA_JUSTICA` - Grupo da Liga da Justiça
+      example: "VINGADORES"
+
+    ErrorResponse:
+      type: object
+      properties:
+        codigo:
+          type: string
+          description: Código único do erro
+          example: "EMAIL_JA_EXISTE"
+        mensagem:
+          type: string
+          description: Mensagem descritiva do erro
+          example: "Email já está em uso: bruce@wayne.com"
+        timestamp:
+          type: string
+          format: date-time
+          description: Data e hora do erro
+          example: "2024-01-15T10:30:00Z"
+        path:
+          type: string
+          description: Caminho da requisição que gerou o erro
+          example: "/api/v1/jogadores"
+      example:
+        codigo: "EMAIL_JA_EXISTE"
+        mensagem: "Email já está em uso: bruce@wayne.com"
+        timestamp: "2024-01-15T10:30:00Z"
+        path: "/api/v1/jogadores"
+
+    Grupo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID único do grupo
+          example: 1
+        nome:
+          type: string
+          maxLength: 50
+          description: Nome do grupo
+          example: "Liga da Justiça"
+        descricao:
+          type: string
+          maxLength: 100
+          description: Descrição do grupo
+          example: "Grupo de super-heróis da DC Comics"
+      example:
+        id: 1
+        nome: "Liga da Justiça"
+        descricao: "Grupo de super-heróis da DC Comics"
+
+  examples:
+    JogadorVingadores:
+      summary: Jogador dos Vingadores
+      value:
+        nome: "Tony Stark"
+        email: "tony@stark.com"
+        telefone: "+55 11 88888-8888"
+        tipoGrupo: "VINGADORES"
+
+    JogadorLigaDaJustica:
+      summary: Jogador da Liga da Justiça
+      value:
+        nome: "Bruce Wayne"
+        email: "bruce@wayne.com"
+        telefone: "+55 11 99999-9999"
+        tipoGrupo: "LIGA_DA_JUSTICA"
+
+  parameters:
+    JogadorId:
+      name: id
+      in: path
+      required: true
+      description: ID único do jogador
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+      example: 1

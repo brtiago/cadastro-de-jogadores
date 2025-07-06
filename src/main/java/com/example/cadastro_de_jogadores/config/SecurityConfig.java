@@ -9,20 +9,35 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private static final String[] SWAGGER_WHITELIST = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger-resources",
+            "/configuration/ui",
+            "/configuration/security",
+            "/webjars/**",
+            "/error"  // Adicione esta linha para permitir a página de erro
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()  // Libera o H2 Console
-                        .requestMatchers("/api/v1/jogadores/**").permitAll()  // Libera sua API
-                        .anyRequest().authenticated()  // Restante exige autenticação
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/api/v1/jogadores/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")  // Desativa CSRF para H2
-                        .ignoringRequestMatchers("/api/v1/jogadores/**")  // Desativa CSRF para sua API
+                        .ignoringRequestMatchers("/h2-console/**")
+                        .ignoringRequestMatchers("/api/v1/jogadores/**")
+                        .ignoringRequestMatchers(SWAGGER_WHITELIST)  // Desativa CSRF para Swagger
                 )
                 .headers(headers -> headers
-                        .frameOptions().disable()  // Permite iframes do H2
+                        .frameOptions().disable()
                 );
 
         return http.build();
