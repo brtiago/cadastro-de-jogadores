@@ -30,7 +30,7 @@ public class VingadoresCodinomeStrategy implements CodinomeStrategy{
     public Mono<String> obterCodinomeDisponivel() {
         return getCodinomeVingadores()
                 .flatMap(codinomes -> {
-                    Set<String> codinomesUsados = jogadorRepository.findCodinomeByGrupoNome("Liga da Justiça");
+                    Set<String> codinomesUsados = jogadorRepository.findCodinomeByGrupoNome("Vingadores");
                     List<String> disponiveis = codinomes.stream()
                             .filter(c -> !codinomesUsados.contains(c))
                             .toList();
