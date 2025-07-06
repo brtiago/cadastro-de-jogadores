@@ -34,7 +34,47 @@ public class Jogador {
 
     public Jogador() {}
 
+    public static class Builder {
+        private String nome;
+        private String email;
+        private String telefone;
+        private String codinome;
+        private Grupo grupo;
 
+        public Builder nome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder codinome(String codinome) {
+            this.codinome = codinome;
+            return this;
+        }
+
+        public Builder grupo(Grupo grupo) {
+            this.grupo = grupo;
+            return this;
+        }
+
+        public Jogador build() {
+            Jogador jogador = new Jogador();
+            jogador.setNome(this.nome);
+            jogador.setEmail(this.email);
+            jogador.setTelefone(this.telefone);
+            jogador.setCodinome(this.codinome);
+            jogador.setGrupo(this.grupo);
+            return jogador;
+        }
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public Integer getId() {
         return id;
