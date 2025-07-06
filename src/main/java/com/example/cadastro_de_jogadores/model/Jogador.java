@@ -1,6 +1,5 @@
 package com.example.cadastro_de_jogadores.model;
 
-import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,7 +28,7 @@ public class Jogador {
     @ManyToOne(fetch = FetchType.LAZY)
     private Grupo grupo;
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
     private boolean ativo = true;
 
     public Jogador() {}
@@ -48,6 +47,11 @@ public class Jogador {
 
         public Builder email(String email) {
             this.email = email;
+            return this;
+        }
+
+        public Builder telefone(String telefone) {
+            this.telefone = telefone;
             return this;
         }
 

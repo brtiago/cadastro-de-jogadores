@@ -45,11 +45,15 @@ public class JogadorService {
 
         String codinome = codinomeService.obterCodinomeDisponivel(request.tipoGrupo())
                 .block();
+        Jogador jogador = Jogador.builder()
+                .nome(request.nome())
+                .email(request.email())
+                .telefone(request.telefone())
+                .codinome(codinome)
+                .grupo(grupo)
+                .build();
 
-        Jogador jogador = JogadorMapper.fromRequest(request, codinome, grupo);
-        Jogador savedJogador = jogadorRepository.save(jogador);
-
-        return JogadorMapper.toDTO(savedJogador);
+        return JogadorMapper.toDTO(jogadorRepository.save(jogador));
     }
 
     private Grupo buscarOuCriarGrupo(@NotNull(message = "Grupo é obrigatório") TipoGrupo tipoGrupo) {
