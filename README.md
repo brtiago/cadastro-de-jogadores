@@ -1,5 +1,63 @@
-## 1. Estrutura do Projeto (MVC)
-   
+# Sistema de Cadastro de Jogadores
+![Java](https://img.shields.io/badge/Java-17-blue)  
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)  
+![License](https://img.shields.io/badge/license-MIT-orange)
+
+## 1. 📝 Descrição
+API para cadastro e gerenciamento de jogadores com codinomes dos Vingadores e Liga da Justiça.
+
+
+## 2. 🚀 Funcionalidades
+* Cadastro de jogadores com codinomes únicos
+* Integração com APIs externas para obter codinomes
+* Validação de email único
+* Gerenciamento de grupos (Vingadores e Liga da Justiça)
+
+## 3. 🏛️ Arquitetura
+
+O sistema utiliza Spring Boot com arquitetura MVC, integrando-se com APIs externas para obter codinomes 
+disponíveis e garantindo que não haja duplicação.
+
+### Diagrama de componentes
+
+```mermaid
+flowchart TD
+A[Frontend] -->|HTTP| B[JogadorController]
+B --> C[JogadorService]
+C --> D[JogadorRepository]
+C --> E[CodinomeService]
+E -->|HTTP| F[API Vingadores]
+E -->|HTTP| G[API Liga da Justiça]
+D --> H[H2 Database]
+```
+
+
+## 4. 🛠️ Tecnologias
+
+Frameworks, bibliotecas e ferramentas.
+
+- **Backend**: Spring Boot, Spring Security, Hibernate
+- **Banco de Dados**: PostgreSQL / H2 (dev)
+- **Testes**: JUnit, Mockito
+
+## 5. ⚙️ Pré-requisitos
+
+* Java 17+
+* Maven
+
+## 6. 📦 Instalação
+* Passos para configurar o projeto localmente.
+```bash
+git clone https://github.com/brtiago/cadastro-de-jogadores.git  
+cd cadastro-de-jogadores  
+mvn spring-boot:run
+```
+
+## 7. 📚 Documentação da API (Swagger/OpenAPI)
+- **Swagger UI**: Disponível em `http://localhost:8080/swagger-ui/index.html` após iniciar a aplicação.
+- **OpenAPI (JSON)**: `http://localhost:8080/v3/api-docs`
+
+## 8. 📂 Estrutura do Projeto (MVC)
 
 ``` plaintext
 src/
@@ -17,23 +75,15 @@ src/
 │       └── swagger.yaml       → Documentação OpenAPI
 ```
 
-## 2. Divisão de Responsabilidades
-| Camada | Exemplo | Framework|
-| ------ | ------- | ---------|
-| Model	| Jogador.java (JPA) | 	Spring Data JPA|
-| Repository | JogadorRepository.java |	Spring Data JPA|
-| Service | JogadorService.java	Spring | (@Service)|
-| Controller |	JogadorController.java	| Spring (@RestController)|
+## 9. 🧪 Testes
+Em desenvolvimento
 
-### Diagrama de componentes atual
+## 10. 🤝 Como Contribuir
+* Faça um fork do projeto
+* Crie uma branch (`git checkout -b feature/nova-feature`)
 
-```mermaid
-flowchart TD
-A[Frontend] -->|HTTP| B[JogadorController]
-B --> C[JogadorService]
-C --> D[JogadorRepository]
-C --> E[CodinomeService]
-E -->|HTTP| F[API Vingadores]
-E -->|HTTP| G[API Liga da Justiça]
-D --> H[H2 Database]
-```
+## 11. 📄 Licença
+![License](https://img.shields.io/badge/license-MIT-orange)
+
+## 12. 📬 Contato
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tgribeiro/)
