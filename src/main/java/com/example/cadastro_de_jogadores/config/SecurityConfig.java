@@ -14,11 +14,9 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
+            "/api/swagger.yaml",          // Libera o acesso ao YAML
             "/swagger-resources/**",
-            "/swagger-resources",
-            "/api-docs/**",
             "/webjars/**",
-            "/favicon.ico",
             "/error"
     };
 

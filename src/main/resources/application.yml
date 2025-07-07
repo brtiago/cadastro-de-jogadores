@@ -9,5 +9,7 @@ springdoc:
     path: /swagger-ui.html
     config-url: /v3/api-docs/swagger-config
     urls:
+      - url: /api/swagger.yaml
+        name: Documentação Completa
       - url: /v3/api-docs
         name: Jogadores API
