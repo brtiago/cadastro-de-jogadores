@@ -2,8 +2,8 @@ package com.example.cadastro_de_jogadores.service;
 
 import com.example.cadastro_de_jogadores.model.dto.response.VingadorResponse;
 import com.example.cadastro_de_jogadores.repository.JogadorRepository;
-import com.example.cadastro_de_jogadores.service.exception.ApiExternaException;
-import com.example.cadastro_de_jogadores.service.exception.CodinomeIndisponivelException;
+import com.example.cadastro_de_jogadores.exception.ApiExternaException;
+import com.example.cadastro_de_jogadores.exception.CodinomeIndisponivelException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

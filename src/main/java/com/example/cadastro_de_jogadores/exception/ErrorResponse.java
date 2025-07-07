@@ -1,4 +1,4 @@
-package com.example.cadastro_de_jogadores.service.exception;
+package com.example.cadastro_de_jogadores.exception;
 
 import java.time.LocalDateTime;
 
