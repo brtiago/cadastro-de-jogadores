@@ -1,7 +1,9 @@
 # Sistema de Cadastro de Jogadores
-![Java](https://img.shields.io/badge/Java-17-blue)  
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)  
-![License](https://img.shields.io/badge/license-MIT-orange)
+<p align="left">
+  <img src="https://img.shields.io/badge/Java-17-blue" alt="Java"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.x-green" alt="Spring Boot"/>
+  <img src="https://img.shields.io/badge/license-MIT-orange" alt="License"/>
+</p>
 
 ## 1. 📝 Descrição
 API para cadastro e gerenciamento de jogadores com codinomes dos Vingadores e Liga da Justiça.
