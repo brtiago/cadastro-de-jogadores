@@ -16,30 +16,32 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-resources",
-            "/configuration/ui",
-            "/configuration/security",
+            "/api-docs/**",
             "/webjars/**",
-            "/error"  // Adicione esta linha para permitir a página de erro
+            "/favicon.ico",
+            "/error"
     };
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/v1/jogadores/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                        .ignoringRequestMatchers("/api/v1/jogadores/**")
-                        .ignoringRequestMatchers(SWAGGER_WHITELIST)  // Desativa CSRF para Swagger
-                )
-                .headers(headers -> headers
-                        .frameOptions().disable()
-                );
 
-        return http.build();
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+      http
+              .authorizeHttpRequests(auth -> auth
+                              .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                              .requestMatchers("/h2-console/**").permitAll()
+                              .requestMatchers("/api/v1/jogadores/**").permitAll()
+                              .anyRequest().authenticated()
+              )
+              .csrf(csrf -> csrf
+                              .ignoringRequestMatchers("/h2-console/**")
+                              .ignoringRequestMatchers("/api/v1/jogadores/**")
+                              .ignoringRequestMatchers(SWAGGER_WHITELIST)  // Desativa CSRF para Swagger
+              )
+              .headers(headers -> headers
+                              .frameOptions().disable()
+              );
+
+      return http.build();
     }
+
 }
