@@ -3,8 +3,8 @@ package com.example.cadastro_de_jogadores.service;
 import com.example.cadastro_de_jogadores.model.Grupo;
 import com.example.cadastro_de_jogadores.model.Jogador;
 import com.example.cadastro_de_jogadores.model.TipoGrupo;
-import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 import com.example.cadastro_de_jogadores.model.dto.JogadorRequest;
+import com.example.cadastro_de_jogadores.model.dto.JogadorResponse;
 import com.example.cadastro_de_jogadores.repository.GrupoRepository;
 import com.example.cadastro_de_jogadores.repository.JogadorRepository;
 import com.example.cadastro_de_jogadores.exception.EmailJaExisteException;
@@ -31,14 +31,14 @@ public class JogadorService {
         this.grupoRepository = grupoRepository;
     }
 
-    public List<JogadorDTO> listarTodos(){
+    public List<JogadorResponse> listarTodos(){
         return jogadorRepository.findAll()
                 .stream()
                 .map(JogadorMapper::toDTO)
                 .toList();
     }
 
-    public JogadorDTO criar(@Valid JogadorRequest request) {
+    public JogadorResponse criar(@Valid JogadorRequest request) {
         validarEmailUnico(request.email());
 
         Grupo grupo = buscarOuCriarGrupo(request.tipoGrupo());

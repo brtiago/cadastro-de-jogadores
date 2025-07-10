@@ -1,7 +1,7 @@
 package com.example.cadastro_de_jogadores.controller;
 
-import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 import com.example.cadastro_de_jogadores.model.dto.JogadorRequest;
+import com.example.cadastro_de_jogadores.model.dto.JogadorResponse;
 import com.example.cadastro_de_jogadores.service.JogadorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,13 +21,13 @@ public class JogadorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JogadorDTO>> listarTodos() {
+    public ResponseEntity<List<JogadorResponse>> listarTodos() {
         return ResponseEntity.ok(jogadorService.listarTodos());
     }
 
     @PostMapping
-    public ResponseEntity<JogadorDTO> criar(@Valid @RequestBody JogadorRequest request) {
-        JogadorDTO jogador = jogadorService.criar(request);
+    public ResponseEntity<JogadorResponse> criar(@Valid @RequestBody JogadorRequest request) {
+        JogadorResponse jogador = jogadorService.criar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(jogador);
     }
 }
