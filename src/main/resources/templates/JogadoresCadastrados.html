@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogadores Cadastrados</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fdf2e9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #ff6b35;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #fff5f0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #fef7f0;
+        }
+
+        .btn {
+            background-color: #ff6b35;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            margin: 0 2px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #e55a2b;
+        }
+
+        .btn-container {
+            text-align: center;
+            padding: 30px;
+            background-color: #fafafa;
+        }
+
+        .btn-novo {
+            background-color: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+
+        .btn-novo:hover {
+            background-color: #e55a2b;
+        }
+
+        .grupo-vingadores {
+            color: #ff6b35;
+            font-weight: 500;
+        }
+
+        .grupo-justica {
+            color: #ff8c42;
+            font-weight: 500;
+        }
+
+        /* Responsividade para Mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                font-size: 20px;
+                padding: 15px;
+            }
+
+            .table-container {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            .btn-novo {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .hide-mobile {
+                display: none;
+            }
+        }
+
+        /* Responsividade para Tablet */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .header {
+                font-size: 22px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        Jogadores cadastrados
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th class="hide-mobile">Telefone</th>
+                <th>Codinome</th>
+                <th class="hide-mobile">Grupo</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="jogador : ${jogadores}">
+                <td th:text="${jogador.nome}">Hulk</td>
+                <td th:text="${jogador.email}">hulk@uol.com.br</td>
+                <td th:text="${jogador.telefone}" class="hide-mobile">(11) 99999-8888</td>
+                <td th:text="${jogador.codinome}">Hulk</td>
+                <td th:text="${jogador.grupo}" class="hide-mobile"
+                    th:class="${jogador.grupo == 'Vingadores' ? 'grupo-vingadores hide-mobile' : 'grupo-justica hide-mobile'}">
+                    Vingadores
+                </td>
+                <td>
+                    <a th:href="@{/jogadores/editar/{id}(id=${jogador.id})}" class="btn">✏️</a>
+                    <a th:href="@{/jogadores/excluir/{id}(id=${jogador.id})}" class="btn"
+                       onclick="return confirm('Tem certeza que deseja excluir este jogador?')">🗑️</a>
+                </td>
+            </tr>
+
+            <!-- Dados de exemplo para visualização -->
+            <tr>
+                <td>Hulk</td>
+                <td>hulk@uol.com.br</td>
+                <td class="hide-mobile">(11) 99999-8888</td>
+                <td>Hulk</td>
+                <td class="grupo-vingadores hide-mobile">Vingadores</td>
+                <td>
+                    <a href="#" class="btn">✏️</a>
+                    <a href="#" class="btn">🗑️</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Paulo</td>
+                <td>paulo@uol.com.br</td>
+                <td class="hide-mobile">(11) 99999-7777</td>
+                <td>Cap. América</td>
+                <td class="grupo-vingadores hide-mobile">Vingadores</td>
+                <td>
+                    <a href="#" class="btn">✏️</a>
+                    <a href="#" class="btn">🗑️</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Leandro</td>
+                <td>leandro@uol.com.br</td>
+                <td class="hide-mobile">(11) 99999-7777</td>
+                <td>Batman</td>
+                <td class="grupo-justica hide-mobile">Liga da Justiça</td>
+                <td>
+                    <a href="#" class="btn">✏️</a>
+                    <a href="#" class="btn">🗑️</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Douglas</td>
+                <td>douglas@uol.com.br</td>
+                <td class="hide-mobile">(11) 99999-7777</td>
+                <td>Pantera Negra</td>
+                <td class="grupo-vingadores hide-mobile">Vingadores</td>
+                <td>
+                    <a href="#" class="btn">✏️</a>
+                    <a href="#" class="btn">🗑️</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Gabi</td>
+                <td>gabi@uol.com.br</td>
+                <td class="hide-mobile">(11) 77889-7777</td>
+                <td>Mulher Maravilha</td>
+                <td class="grupo-justica hide-mobile">Liga da Justiça</td>
+                <td>
+                    <a href="#" class="btn">✏️</a>
+                    <a href="#" class="btn">🗑️</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn-container">
+        <button class="btn-novo" onclick="window.location.href='/jogadores/novo'">
+            Novo jogador
+        </button>
+    </div>
+</div>
+</body>
+</html>

@@ -28,7 +28,10 @@ public class SecurityConfig {
                               .requestMatchers(SWAGGER_WHITELIST).permitAll()
                               .requestMatchers("/h2-console/**").permitAll()
                               .requestMatchers("/api/v1/jogadores/**").permitAll()
-                              .anyRequest().authenticated()
+                              .requestMatchers("/", "/index", "/home").permitAll()  // Páginas principais
+                              .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**").permitAll() // Recursos estáticos
+
+                      .anyRequest().authenticated()
               )
               .csrf(csrf -> csrf
                               .ignoringRequestMatchers("/h2-console/**")
