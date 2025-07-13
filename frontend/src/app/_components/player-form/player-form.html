@@ -1,0 +1,99 @@
+<div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input
+          type="text"
+          id="nome"
+          formControlName="nome"
+          required
+          [class.invalid]="form.controls.nome.invalid && form.controls.nome.touched"
+        >
+        @if (form.controls.nome.invalid && form.controls.nome.touched) {
+          <div class="error-message">
+            Nome é obrigatório
+          </div>
+        }
+      </div>
+  
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          required
+          [class.invalid]="form.controls.email.invalid && form.controls.email.touched"
+        >
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <div class="error-message">
+            @if (form.controls.email.errors?.['required']) {
+              E-mail é obrigatório
+            }
+            @if (form.controls.email.errors?.['email']) {
+              Por favor, insira um e-mail válido
+            }
+          </div>
+        }
+      </div>
+  
+      <div class="form-group">
+        <label for="telefone">Telefone:</label>
+        <input
+          type="tel"
+          id="telefone"
+          formControlName="telefone"
+          required
+          [class.invalid]="form.controls.telefone.invalid && form.controls.telefone.touched"
+        >
+        @if (form.controls.telefone.invalid && form.controls.telefone.touched) {
+          <div class="error-message">
+            Telefone é obrigatório
+          </div>
+        }
+      </div>
+  
+      <div class="form-group">
+        <label>Quero ser do grupo:</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="liga"
+              formControlName="grupo"
+              value="Liga da Justiça"
+              [checked]="form.get('grupo')?.value === 'Liga da Justiça'"
+            >
+            <label for="liga">Liga da Justiça</label>
+          </div>
+  
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="vingadores"
+              formControlName="grupo"
+              value="Vingadores"
+            >
+            <label for="vingadores">Os Vingadores</label>
+          </div>
+        </div>
+      </div>
+  
+      <div class="btn-container">
+        <button
+          type="submit"
+          class="btn"
+          [disabled]="form.invalid"
+        >
+          Cadastrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="navigateToList()"
+        >
+          Listar jogadores
+        </button>
+      </div>
+    </form>
+  </div>
