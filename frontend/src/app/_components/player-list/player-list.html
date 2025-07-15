@@ -1,1 +1,71 @@
-<p>player-list works!</p>
+<!-- Header -->
+<div class="header bg-orange-500 text-white p-5 text-center text-2xl font-semibold md:text-xl md:p-4">
+    Jogadores Cadastrados
+</div>
+
+<!-- Table Container -->
+<div class="table-container overflow-x-auto p-5 md:p-4">
+    @if (jogadores().length > 0) {
+    <table class="player-table w-full border-collapse text-sm md:text-xs">
+        <thead>
+            <tr>
+                <th
+                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
+                    Nome</th>
+                <th
+                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
+                    E-mail</th>
+                <th
+                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
+                    Telefone</th>
+                <th
+                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
+                    Codinome</th>
+                <th
+                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
+                    Grupo</th>
+                <th
+                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5 sd:hidden">
+                    Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (jogador of jogadores(); track jogador.id) {
+            <tr class="table-row hover:bg-orange-50">
+                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.nome }}</td>
+                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.email }}</td>
+                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.telefone }}</td>
+                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.codinome }}</td>
+                <td [class]="'p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5 ' + getGrupoClass(jogador.grupo)">
+                    <span class="text-orange-400 font-medium">{{ jogador.grupo }}</span>
+                </td>
+                <td>
+                    <div class="action-buttons p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">
+                        <button (click)="editarJogador(jogador.id)"
+                            class="btn btn-edit bg-orange-500 text-white border-none py-1.5 px-3 mx-0.5 cursor-pointer text-xs inline-block rounded hover:bg-orange-600 md:py-1 md:px-2 md:text-[11px]">
+                            ✏️
+                        </button>
+                        <button (click)="excluirJogador(jogador.id)"
+                            class="btn btn-delete bg-orange-500 text-white border-none py-1.5 px-3 mx-0.5 cursor-pointer text-xs no-underline inline-block rounded hover:bg-orange-600 md:py-1 md:px-2 md:text-[11px]">
+                            🗑️
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    } @else {
+    <div class="empty-state">
+        <p>Nenhum jogador cadastrado ainda.</p>
+    </div>
+    }
+</div>
+
+<!-- Add New Player Button -->
+<div class="btn-container text-center py-7 bg-gray-100">
+    <button (click)="novoJogador()"
+        class="btn btn-primary bg-orange-500 text-white border-none py-3 px-6 cursor-pointer text-base font-semibold rounded-md hover:bg-orange-600 md:py-2.5 md:px-5 md:text-sm">
+        Novo Jogador
+    </button>
+</div>

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -27,13 +27,13 @@ export class PlayerForm {
   // Método para submeter o formulário
   onSubmit() {
     if (this.form.valid) {
-      console.log('Formulário enviado:', this.form.value);
-      
+      console.log('Formulário enviado:', this.form.getRawValue());
+      this.navigateToList();
     }
   }
 
   // Método para navegar para a lista de jogadores
   navigateToList() {
-    this.router.navigate(['/jogadores']);
+    this.router.navigate(['/player-list']);
   }
 }
