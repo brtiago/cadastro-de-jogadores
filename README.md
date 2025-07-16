@@ -38,19 +38,17 @@ API para cadastro e gerenciamento de jogadores com codinomes dos Vingadores e Li
 O sistema utiliza Spring Boot com arquitetura MVC, integrando-se com APIs externas para obter codinomes 
 disponíveis e garantindo que não haja duplicação.
 
-<details>
-    <summary><b>Diagrama de componentes</b></summary>
-    ```mermaid
-      flowchart TD
-      A[Frontend] -->|HTTP| B[JogadorController]
-      B --> C[JogadorService]
-      C --> D[JogadorRepository]
-      C --> E[CodinomeService]
-      E -->|HTTP| F[API Vingadores]
-      E -->|HTTP| G[API Liga da Justiça]
-      D --> H[H2 Database]
-    ```
-</details>
+### Diagrama de componentes
+```mermaid 
+flowchart TD
+A[Frontend] -->|HTTP| B[JogadorController]
+B --> C[JogadorService]
+C --> D[JogadorRepository]
+C --> E[CodinomeService]
+E -->|HTTP| F[API Vingadores]
+E -->|HTTP| G[API Liga da Justiça]
+D --> H[H2 Database]
+```
 
 
 
