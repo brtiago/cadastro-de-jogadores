@@ -1,71 +1,65 @@
-<!-- Header -->
-<div class="header bg-orange-500 text-white p-5 text-center text-2xl font-semibold md:text-xl md:p-4">
-    Jogadores Cadastrados
-</div>
-
-<!-- Table Container -->
-<div class="table-container overflow-x-auto p-5 md:p-4">
-    @if (jogadores().length > 0) {
-    <table class="player-table w-full border-collapse text-sm md:text-xs">
-        <thead>
-            <tr>
-                <th
-                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
-                    Nome</th>
-                <th
-                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
-                    E-mail</th>
-                <th
-                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
-                    Telefone</th>
-                <th
-                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
-                    Codinome</th>
-                <th
-                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5">
-                    Grupo</th>
-                <th
-                    class="p-3 text-left border-b border-gray-200 bg-orange-50 text-gray-800 font-semibold md:p-2 md:px-1.5 sd:hidden">
-                    Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (jogador of jogadores(); track jogador.id) {
-            <tr class="table-row hover:bg-orange-50">
-                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.nome }}</td>
-                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.email }}</td>
-                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.telefone }}</td>
-                <td class="p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">{{ jogador.codinome }}</td>
-                <td [class]="'p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5 ' + getGrupoClass(jogador.grupo)">
-                    <span class="text-orange-400 font-medium">{{ jogador.grupo }}</span>
-                </td>
-                <td>
-                    <div class="action-buttons p-3 text-left border-b border-gray-200 md:p-2 md:px-1.5">
-                        <button (click)="editarJogador(jogador.id)"
-                            class="btn btn-edit bg-orange-500 text-white border-none py-1.5 px-3 mx-0.5 cursor-pointer text-xs inline-block rounded hover:bg-orange-600 md:py-1 md:px-2 md:text-[11px]">
-                            ✏️
-                        </button>
-                        <button (click)="excluirJogador(jogador.id)"
-                            class="btn btn-delete bg-orange-500 text-white border-none py-1.5 px-3 mx-0.5 cursor-pointer text-xs no-underline inline-block rounded hover:bg-orange-600 md:py-1 md:px-2 md:text-[11px]">
-                            🗑️
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-    } @else {
-    <div class="empty-state">
-        <p>Nenhum jogador cadastrado ainda.</p>
+<div class="p-6">
+    <!-- Cabeçalho com contador -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-800">
+        Lista de Jogadores ({{ totalJogadores() }})
+      </h2>
+      <button
+        (click)="novoJogador()"
+        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+        ➕ Novo Jogador
+      </button>
     </div>
+  
+    <!-- Estado vazio -->
+    @if (isEmpty()) {
+      <div class="text-center py-12">
+        <div class="text-6xl mb-4">👥</div>
+        <h3 class="text-lg font-medium text-gray-600 mb-2">Nenhum jogador encontrado</h3>
+        <p class="text-gray-500 mb-4">Adicione seu primeiro jogador para começar</p>
+        <button
+          (click)="novoJogador()"
+          class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+          Adicionar Primeiro Jogador
+        </button>
+      </div>
+    } @else {
+      <!-- Lista de jogadores -->
+      <div class="space-y-4">
+        @for (jogador of jogadores(); track jogador.id) {
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <h3 class="font-semibold text-gray-800">{{ jogador.nome }}</h3>
+                  <span class="text-2xl">{{ getGrupoIcon(jogador.grupo) }}</span>
+                </div>
+                
+                <div class="space-y-1 text-sm text-gray-600">
+                  <p><strong>Email:</strong> {{ jogador.email }}</p>
+                  <p><strong>Telefone:</strong> {{ jogador.telefone }}</p>
+                  <p><strong>Codinome:</strong> {{ jogador.codinome }}</p>
+                  <p><strong>Grupo:</strong> 
+                    <span [class]="getGrupoClass(jogador.grupo)">{{ jogador.grupo }}</span>
+                  </p>
+                </div>
+              </div>
+  
+              <div class="flex gap-2 ml-4">
+                <button
+                  (click)="editarJogador(jogador.id)"
+                  [class]="'text-white px-3 py-1 rounded text-sm focus:outline-none focus:ring-2 transition-colors ' + getBotaoClass(jogador.grupo)">
+                  ✏️ Editar
+                </button>
+                <button
+                  (click)="excluirJogador(jogador.id)"
+                  class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors">
+                  🗑️ Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
     }
-</div>
-
-<!-- Add New Player Button -->
-<div class="btn-container text-center py-7 bg-gray-100">
-    <button (click)="novoJogador()"
-        class="btn btn-primary bg-orange-500 text-white border-none py-3 px-6 cursor-pointer text-base font-semibold rounded-md hover:bg-orange-600 md:py-2.5 md:px-5 md:text-sm">
-        Novo Jogador
-    </button>
-</div>
+  </div>
