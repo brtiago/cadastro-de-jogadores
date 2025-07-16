@@ -8,6 +8,24 @@
 ## 1. 📝 Descrição
 API para cadastro e gerenciamento de jogadores com codinomes dos Vingadores e Liga da Justiça.
 
+### 🗂️ Imagens do Projeto(frontend)
+
+<details>
+    <summary><b>Lista de jogadores</b></summary>
+    <img src="./src/main/resources/desafio/referencias/lista_jogadores.png" alt="Lista de jogadores" height="600">
+</details>
+<details>
+    <summary><b>Cadastro de jogadores</b></summary>
+    <img src="./src/main/resources/desafio/referencias/tela_jogador.png" alt="Cadastro de jogador" height="600">
+</details>
+<details>
+    <summary><b>Remoção de jogador</b></summary>
+    <img src="./src/main/resources/desafio/referencias/excluindo.png" alt="Remoção de jogador" height="600">
+</details>
+<details>
+    <summary><b>Nenhum jogador</b></summary>
+    <img src="./src/main/resources/desafio/referencias/nenhum_jogador.png" alt="Nenhum jogador" height="600">
+</details>
 
 ## 2. 🚀 Funcionalidades
 * Cadastro de jogadores com codinomes únicos
@@ -20,27 +38,34 @@ API para cadastro e gerenciamento de jogadores com codinomes dos Vingadores e Li
 O sistema utiliza Spring Boot com arquitetura MVC, integrando-se com APIs externas para obter codinomes 
 disponíveis e garantindo que não haja duplicação.
 
-### Diagrama de componentes
+<details>
+    <summary><b>Diagrama de componentes</b></summary>
+    ```mermaid
+      flowchart TD
+      A[Frontend] -->|HTTP| B[JogadorController]
+      B --> C[JogadorService]
+      C --> D[JogadorRepository]
+      C --> E[CodinomeService]
+      E -->|HTTP| F[API Vingadores]
+      E -->|HTTP| G[API Liga da Justiça]
+      D --> H[H2 Database]
+    ```
+</details>
 
-```mermaid
-flowchart TD
-A[Frontend] -->|HTTP| B[JogadorController]
-B --> C[JogadorService]
-C --> D[JogadorRepository]
-C --> E[CodinomeService]
-E -->|HTTP| F[API Vingadores]
-E -->|HTTP| G[API Liga da Justiça]
-D --> H[H2 Database]
-```
+
 
 
 ## 4. 🛠️ Tecnologias
 
 Frameworks, bibliotecas e ferramentas.
-
-- **Backend**: Spring Boot, Spring Security, Hibernate
-- **Banco de Dados**: PostgreSQL / H2 (dev)
+- **Linguagem**: Java
+- **Framework**: Spring Boot
+- **Gerenciador de Dependências**: Maven
+- **Banco de Dados**: H2 Database(dev)
+- **Segurança**: Spring Security, JWT Token
 - **Testes**: JUnit, Mockito
+- **Utilitários**: Lombok, MapStruct
+- **Documentação da API**: SpringDoc OpenAPI
 
 ## 5. ⚙️ Pré-requisitos
 
@@ -88,4 +113,6 @@ Em desenvolvimento
 ![License](https://img.shields.io/badge/license-MIT-orange)
 
 ## 12. 📬 Contato
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tgribeiro/)
+👩‍💻 Projeto desenvolvido por [Tiago Ribeiro](https://www.linkedin.com/in/tgribeiro/)
+
+🤝 Fique à vontade para contribuir!
