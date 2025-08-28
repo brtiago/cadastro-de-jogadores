@@ -2,6 +2,10 @@ spring:
   application:
     name: Cadastro de Jogadores
 
+
+  thymeleaf:
+    cache: false
+
   h2:
     console:
       enabled: true
