@@ -7,7 +7,7 @@ export interface Jogador {
   email: string;
   telefone: string;
   codinome?: string;
-  nomeGrupo: string;
+  nomeGrupo: TipoGrupo;
   createdAt?: Date;
   ativo?: boolean;
 }
