@@ -2,12 +2,14 @@ import { Injectable, signal, computed, injected } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 export interface Jogador {
-  id: number;
+  id?: number;
   nome: string;
   email: string;
   telefone: string;
-  codinome: string;
-  grupo: string;
+  codinome?: string;
+  nomeGrupo: string;
+  createdAt?: Date;
+  ativo?: boolean;
 }
 
 @Injectable({
