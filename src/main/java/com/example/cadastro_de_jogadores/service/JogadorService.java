@@ -1,5 +1,6 @@
 package com.example.cadastro_de_jogadores.service;
 
+import com.example.cadastro_de_jogadores.exception.DatabaseException;
 import com.example.cadastro_de_jogadores.model.Grupo;
 import com.example.cadastro_de_jogadores.model.Jogador;
 import com.example.cadastro_de_jogadores.model.TipoGrupo;
@@ -71,6 +72,16 @@ public class JogadorService {
     private void validarEmailUnico(String email) {
         if (jogadorRepository.existsByEmailAndAtivoTrue(email)) {
             throw new EmailJaExisteException("Email já está em uso: " + email);
+        }
+    }
+
+    public void delete(int id) {
+        Jogador jogador = jogadorRepository.findById(id).orElse(null);
+
+        try {
+            jogadorRepository.deleteById(jogador.getId());
+        } catch (Exception e) {
+            throw new DatabaseException("Jogador não encontrado!");
         }
     }
 }
