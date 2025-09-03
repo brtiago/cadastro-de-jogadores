@@ -42,3 +42,8 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.h2: INFO
+
+
+server:
+  error:
+    include-stacktrace: never
