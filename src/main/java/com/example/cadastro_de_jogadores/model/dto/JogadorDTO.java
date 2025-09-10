@@ -1,5 +1,6 @@
 package com.example.cadastro_de_jogadores.model.dto;
 
+import com.example.cadastro_de_jogadores.model.Grupo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -14,5 +15,5 @@ public record JogadorDTO(
         String telefone,
         String codinome,
         Boolean ativo,
-        String nomeGrupo
+        Grupo nomeGrupo
 ) { }
