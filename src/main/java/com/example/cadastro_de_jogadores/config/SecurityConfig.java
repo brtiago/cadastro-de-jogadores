@@ -10,39 +10,36 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] SWAGGER_WHITELIST = {
+    private static final String[] WHITELISTED_API_ENDPOINTS = {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api/swagger.yaml",          // Libera o acesso ao YAML
             "/swagger-resources/**",
             "/webjars/**",
-            "/error"
+            "/error",
+            "/h2-console/**",
+            "/api/v1/jogadores/**",
+            "/", "/index", "/home",
+            "/static/**", "/css/**", "/js/**", "/images/**"
     };
 
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-      http
-              .authorizeHttpRequests(auth -> auth
-                              .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                              .requestMatchers("/h2-console/**").permitAll()
-                              .requestMatchers("/api/v1/jogadores/**").permitAll()
-                              .requestMatchers("/", "/index", "/home").permitAll()  // Páginas principais
-                              .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**").permitAll() // Recursos estáticos
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(WHITELISTED_API_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(WHITELISTED_API_ENDPOINTS)  // Desativa CSRF para Swagger
+                )
+                .headers(headers -> headers
+                        .frameOptions().disable()
+                );
 
-                      .anyRequest().authenticated()
-              )
-              .csrf(csrf -> csrf
-                              .ignoringRequestMatchers("/h2-console/**")
-                              .ignoringRequestMatchers("/api/v1/jogadores/**")
-                              .ignoringRequestMatchers(SWAGGER_WHITELIST)  // Desativa CSRF para Swagger
-              )
-              .headers(headers -> headers
-                              .frameOptions().disable()
-              );
-
-      return http.build();
+        return http.build();
     }
 
 }
