@@ -100,6 +100,10 @@ public class Jogador {
         this.email = email;
     }
 
+    public String setCodinome() {
+        return codinome;
+    }
+
     public String getCodinome() {
         return codinome;
     }
