@@ -4,6 +4,7 @@ import com.example.cadastro_de_jogadores.exception.DatabaseException;
 import com.example.cadastro_de_jogadores.model.Grupo;
 import com.example.cadastro_de_jogadores.model.Jogador;
 import com.example.cadastro_de_jogadores.model.TipoGrupo;
+import com.example.cadastro_de_jogadores.model.dto.JogadorDTO;
 import com.example.cadastro_de_jogadores.model.dto.JogadorRequest;
 import com.example.cadastro_de_jogadores.model.dto.JogadorResponse;
 import com.example.cadastro_de_jogadores.repository.GrupoRepository;
@@ -83,5 +84,20 @@ public class JogadorService {
         } catch (Exception e) {
             throw new DatabaseException("Jogador não encontrado!");
         }
+    }
+
+    public JogadorResponse buscarId(Integer id) {
+        jogadorRepository.findById(id).orElse(null);
+        return JogadorMapper.toDTO(jogadorRepository.findById(id).get());
+    }
+
+    public JogadorResponse atualizar(int id, @Valid JogadorDTO request) {
+        Jogador jogador = jogadorRepository.findById(id).orElse(null);
+
+        jogador.setNome(request.nome());
+        jogador.setEmail(request.email());
+        jogador.setTelefone(request.telefone());
+        jogador.setCodinome(request.codinome());
+        jogador.setGrupo(request.nomeGrupo());
     }
 }
