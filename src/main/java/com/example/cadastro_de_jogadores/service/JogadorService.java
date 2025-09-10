@@ -10,6 +10,7 @@ import com.example.cadastro_de_jogadores.model.dto.JogadorResponse;
 import com.example.cadastro_de_jogadores.repository.GrupoRepository;
 import com.example.cadastro_de_jogadores.repository.JogadorRepository;
 import com.example.cadastro_de_jogadores.exception.EmailJaExisteException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -91,13 +92,26 @@ public class JogadorService {
         return JogadorMapper.toDTO(jogadorRepository.findById(id).get());
     }
 
-    public JogadorResponse atualizar(int id, @Valid JogadorDTO request) {
-        Jogador jogador = jogadorRepository.findById(id).orElse(null);
+    public JogadorResponse atualizar(int id, @Valid JogadorRequest request) {
+        Jogador jogador = jogadorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Jogador não encontrado"));
+
+        if(!jogador.getEmail().equals(request.email()) &&
+        jogadorRepository.existsByEmailAndAtivoTrue(request.email())) {
+            throw new EmailJaExisteException("Email já está em uso: " + request.email());
+        }
 
         jogador.setNome(request.nome());
         jogador.setEmail(request.email());
         jogador.setTelefone(request.telefone());
-        jogador.setCodinome(request.codinome());
-        jogador.setGrupo(request.nomeGrupo());
+
+        Grupo novoGrupo = buscarOuCriarGrupo(request.tipoGrupo());
+        if (!jogador.getGrupo().equals(novoGrupo)) {
+            String novoCodinome = codinomeService.obterCodinomeDisponivel(request.tipoGrupo()).block();
+            jogador.setCodinome(novoCodinome);
+            jogador.setGrupo(novoGrupo);
+        }
+
+        return JogadorMapper.toDTO(jogadorRepository.save(jogador));
     }
 }
