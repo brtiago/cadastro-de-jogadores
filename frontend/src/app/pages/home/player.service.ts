@@ -1,5 +1,6 @@
-import { Injectable, signal, computed, injected } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {computed, inject, Injectable, signal} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {TipoGrupo} from '../../_components/tipo-grupo.enum';
 
 export interface Jogador {
   id?: number;
@@ -7,7 +8,7 @@ export interface Jogador {
   email: string;
   telefone: string;
   codinome?: string;
-  nomeGrupo: TipoGrupo;
+  tipoGrupo: TipoGrupo;
   createdAt?: Date;
   ativo?: boolean;
 }
@@ -20,6 +21,7 @@ export class PlayerService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/v1/jogadores';
 
+  private readonly jogadores = signal<Jogador[]>([]);
     /** Mock data
     // Signals para gerenciar estado
       private readonly jogadores = signal<Jogador[]>(
@@ -29,7 +31,7 @@ export class PlayerService {
       email: 'joao@email.com',
       telefone: '(11) 99999-9999',
       codinome: 'Batman',
-      grupo: 'Liga da Justiça'
+      tipoGrupo: TipoGrupo.LIGA_JUSTICA
       },
       {
       id: 2,
@@ -37,11 +39,10 @@ export class PlayerService {
       email: 'maria@email.com',
       telefone: '(11) 88888-8888',
       codinome: 'Flash',
-      grupo: 'Vingadores'
+     tipoGrupo: TipoGrupo.VINGADORES
       }
-    ]
-  */
-);
+    ]);
+     */
 
   private readonly jogadorSelecionado = signal<Jogador | null>(null);
   private readonly proximoId = signal(3);
@@ -92,12 +93,12 @@ export class PlayerService {
   }
 
   // Método para obter classe CSS baseada no grupo
-  getGrupoClass(grupo: string): string {
-    return grupo === 'Vingadores' ? 'text-orange-600 font-semibold' : 'text-blue-600 font-semibold';
+  getGrupoClass(grupo: TipoGrupo): string {
+    return grupo === TipoGrupo.VINGADORES ? 'text-orange-600 font-semibold' : 'text-blue-600 font-semibold';
   }
 
   // Método para obter ícone baseado no grupo
-  getGrupoIcon(grupo: string): string {
-    return grupo === 'Vingadores' ? '🦸‍♂️' : '🦹‍♂️';
+  getGrupoIcon(grupo: TipoGrupo): string {
+    return grupo === TipoGrupo.VINGADORES ? '🦸‍♂️' : '🦹‍♂️';
   }
 }

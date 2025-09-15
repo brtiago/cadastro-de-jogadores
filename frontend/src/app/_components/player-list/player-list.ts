@@ -1,6 +1,7 @@
-import { Component, inject, Output, EventEmitter, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PlayerService, Jogador } from '../../pages/home/player.service';
+import {Component, computed, EventEmitter, inject, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {PlayerService} from '../../pages/home/player.service';
+import {TipoGrupo} from '../tipo-grupo.enum';
 
 @Component({
   selector: 'app-player-list',
@@ -38,19 +39,19 @@ export class PlayerList {
   }
 
   // Método para obter classe CSS baseada no grupo
-  getGrupoClass(grupo: string): string {
+  getGrupoClass(grupo: TipoGrupo): string {
     return this.playerService.getGrupoClass(grupo);
   }
 
   // Método para obter ícone baseado no grupo
-  getGrupoIcon(grupo: string): string {
+  getGrupoIcon(grupo: TipoGrupo): string {
     return this.playerService.getGrupoIcon(grupo);
   }
 
   // Método para obter classe do botão baseada no grupo
-  getBotaoClass(grupo: string): string {
-    return grupo === 'Vingadores' 
-      ? 'bg-orange-500 hover:bg-orange-600' 
+  getBotaoClass(grupo: TipoGrupo): string {
+    return grupo === TipoGrupo.VINGADORES
+      ? 'bg-orange-500 hover:bg-orange-600'
       : 'bg-blue-500 hover:bg-blue-600';
   }
 }

@@ -2,10 +2,11 @@ import { Component, inject, Input, Output, EventEmitter, OnInit, effect } from '
 import { FormBuilder, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PlayerService, Jogador } from '../../pages/home/player.service';
+import { TipoGrupo } from '../tipo-grupo.enum';
 
 @Component({
   selector: 'app-player-form',
-  imports: [ 
+  imports: [
     ReactiveFormsModule,
     CommonModule
   ],
@@ -20,14 +21,19 @@ export class PlayerForm implements OnInit {
   @Output() onSubmit = new EventEmitter<void>();
   @Output() onCancel = new EventEmitter<void>();
 
-  readonly grupos = ['Liga da Justiça', 'Vingadores'];
+  readonly tiposGrupo = Object.values(TipoGrupo);
+
+  readonly labelsGrupo: { [key in TipoGrupo]: string } = {
+    [TipoGrupo.LIGA_JUSTICA]: 'Liga da Justiça',
+    [TipoGrupo.VINGADORES]: 'Vingadores'
+  };
 
   form = this.fb.group({
     nome: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     telefone: ['', Validators.required],
     codinome: ['', Validators.required],
-    grupo: ['Liga da Justiça', Validators.required]
+    tipoGrupo: [TipoGrupo.LIGA_JUSTICA, Validators.required]
   });
 
   // Effect para carregar dados quando um jogador é selecionado
@@ -40,7 +46,7 @@ export class PlayerForm implements OnInit {
           email: jogadorSelecionado.email,
           telefone: jogadorSelecionado.telefone,
           codinome: jogadorSelecionado.codinome,
-          grupo: jogadorSelecionado.grupo
+          tipoGrupo: jogadorSelecionado.tipoGrupo
         });
       }
     });
@@ -54,7 +60,7 @@ export class PlayerForm implements OnInit {
         email: '',
         telefone: '',
         codinome: '',
-        grupo: 'Liga da Justiça'
+        tipoGrupo: TipoGrupo.LIGA_JUSTICA
       });
     }
   }
@@ -73,7 +79,7 @@ export class PlayerForm implements OnInit {
           email: formData.email!,
           telefone: formData.telefone!,
           codinome: formData.codinome!,
-          grupo: formData.grupo!
+          tipoGrupo: formData.tipoGrupo!
         };
         this.playerService.atualizarJogador(jogadorAtualizado);
       } else {
@@ -83,7 +89,7 @@ export class PlayerForm implements OnInit {
           email: formData.email!,
           telefone: formData.telefone!,
           codinome: formData.codinome!,
-          grupo: formData.grupo!
+          tipoGrupo: formData.tipoGrupo!
         });
       }
 
@@ -100,7 +106,7 @@ export class PlayerForm implements OnInit {
       email: '',
       telefone: '',
       codinome: '',
-      grupo: 'Liga da Justiça'
+      tipoGrupo: TipoGrupo.LIGA_JUSTICA
     });
     this.onCancel.emit();
   }
@@ -133,7 +139,7 @@ export class PlayerForm implements OnInit {
       email: 'Email',
       telefone: 'Telefone',
       codinome: 'Codinome',
-      grupo: 'Grupo'
+      tipoGrupo: 'Grupo'
     };
     return labels[field] || field;
   }
@@ -142,5 +148,9 @@ export class PlayerForm implements OnInit {
   hasError(field: string): boolean {
     const control = this.form.get(field);
     return !!(control?.errors && control.touched);
+  }
+
+  getLabelGrupo(tipo: TipoGrupo): string {
+    return this.labelsGrupo[tipo];
   }
 }
