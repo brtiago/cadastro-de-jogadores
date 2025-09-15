@@ -1,4 +1,4 @@
 export enum TipoGrupo {
-  LIGA_JUSTICA = 'LIGA_JUSTICA',
+  LIGA_JUSTICA = 'LIGA_DA_JUSTICA',
   VINGADORES = 'VINGADORES'
 }
