@@ -68,7 +68,7 @@
           formControlName="grupo"
           class="w-full p-3 border border-gray-200 rounded-md text-sm transition-colors duration-300 text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           [class.border-red-500]="hasError('grupo')">
-          @for (grupo of grupos; track grupo) {
+          @for (grupo of tiposGrupo; track grupo) {
             <option [value]="grupo">{{ grupo }}</option>
           }
         </select>
