@@ -20,30 +20,30 @@
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-2">
                   <h3 class="font-semibold text-gray-800">{{ jogador.nome }}</h3>
-                  <span class="text-2xl">{{ getGrupoIcon(jogador.grupo) }}</span>
+                  <span class="text-2xl">{{ getGrupoIcon(jogador.tipoGrupo) }}</span>
                 </div>
-                
+
                 <div class="space-y-1 text-sm text-gray-600">
                   <p><strong>Email:</strong> {{ jogador.email }}</p>
                   <p><strong>Telefone:</strong> {{ jogador.telefone }}</p>
                   <p><strong>Codinome:</strong> {{ jogador.codinome }}</p>
-                  <p><strong>Grupo:</strong> 
-                    <span [class]="getGrupoClass(jogador.grupo)"> {{ jogador.grupo }}</span>
+                  <p><strong>Grupo:</strong>
+                    <span [class]="getGrupoClass(jogador.tipoGrupo)"> {{ jogador.tipoGrupo }}</span>
                   </p>
                 </div>
               </div>
-  
+
               <div class="flex gap-2 ml-4">
                 <!-- Botão Editar -->
                 <button
-                  (click)="editarJogador(jogador.id)"
-                  [class]="'text-white px-3 py-2 rounded text-sm focus:outline-none focus:ring-2 transition-colors ' + getBotaoClass(jogador.grupo)">
+                  (click)="jogador.id && editarJogador(jogador.id)"
+                  [class]="'text-white px-3 py-2 rounded text-sm focus:outline-none focus:ring-2 transition-colors ' + getBotaoClass(jogador.tipoGrupo)">
                   ✏️ Editar
                 </button>
-              
+
                 <!-- Botão Excluir -->
                 <button
-                  (click)="excluirJogador(jogador.id)"
+                  (click)="jogador.id && excluirJogador(jogador.id)"
                   class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors">
                   🗑️ Excluir
                 </button>
