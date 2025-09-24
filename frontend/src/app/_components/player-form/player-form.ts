@@ -1,4 +1,4 @@
-import { Component, inject, Input, Output, EventEmitter, OnInit, effect } from '@angular/core';
+import { Component, inject, Input, Output, EventEmitter, OnInit, effect, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PlayerService, Jogador } from '../../pages/home/player.service';
@@ -22,21 +22,20 @@ export class PlayerForm implements OnInit {
   @Output() onCancel = new EventEmitter<void>();
 
   readonly tiposGrupo = Object.values(TipoGrupo);
+  readonly isSubmitting = signal(false);
 
   readonly labelsGrupo: { [key in TipoGrupo]: string } = {
-    [TipoGrupo.LIGA_JUSTICA]: 'Liga da Justiça',
+    [TipoGrupo.LIGA_DA_JUSTICA]: 'Liga da Justiça',
     [TipoGrupo.VINGADORES]: 'Vingadores'
   };
 
   form = this.fb.group({
     nome: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    telefone: ['', Validators.required],
-    codinome: ['', Validators.required],
-    tipoGrupo: [TipoGrupo.LIGA_JUSTICA, Validators.required]
+    telefone: [''],
+    tipoGrupo: [TipoGrupo.LIGA_DA_JUSTICA, Validators.required]
   });
 
-  // Effect para carregar dados quando um jogador é selecionado
   constructor() {
     effect(() => {
       const jogadorSelecionado = this.playerService.getJogadorSelecionado();
@@ -45,7 +44,6 @@ export class PlayerForm implements OnInit {
           nome: jogadorSelecionado.nome,
           email: jogadorSelecionado.email,
           telefone: jogadorSelecionado.telefone,
-          codinome: jogadorSelecionado.codinome,
           tipoGrupo: jogadorSelecionado.tipoGrupo
         });
       }
@@ -53,72 +51,79 @@ export class PlayerForm implements OnInit {
   }
 
   ngOnInit(): void {
-    // Limpa o formulário se não há jogador selecionado
     if (!this.playerService.getJogadorSelecionado()) {
       this.form.reset({
         nome: '',
         email: '',
         telefone: '',
-        codinome: '',
-        tipoGrupo: TipoGrupo.LIGA_JUSTICA
+        tipoGrupo: TipoGrupo.LIGA_DA_JUSTICA
       });
     }
   }
 
-  // Método para submeter o formulário
   onSubmitForm(): void {
-    if (this.form.valid) {
+    if (this.form.valid && !this.isSubmitting()) {
+      this.isSubmitting.set(true);
+
       const formData = this.form.getRawValue();
       const jogadorSelecionado = this.playerService.getJogadorSelecionado();
 
-      if (jogadorSelecionado) {
-        // Atualizar jogador existente
-        const jogadorAtualizado: Jogador = {
-          ...jogadorSelecionado,
-          nome: formData.nome!,
-          email: formData.email!,
-          telefone: formData.telefone!,
-          codinome: formData.codinome!,
-          tipoGrupo: formData.tipoGrupo!
-        };
-        this.playerService.atualizarJogador(jogadorAtualizado);
-      } else {
-        // Adicionar novo jogador
-        this.playerService.adicionarJogador({
-          nome: formData.nome!,
-          email: formData.email!,
-          telefone: formData.telefone!,
-          codinome: formData.codinome!,
-          tipoGrupo: formData.tipoGrupo!
-        });
+      // Criar objeto jogador
+      const jogadorData: Jogador = {
+        nome: formData.nome!,
+        email: formData.email!,
+        telefone: formData.telefone || '',
+        tipoGrupo: formData.tipoGrupo!
+      };
+
+      // Se estiver atualizando, incluir o ID
+      if (jogadorSelecionado && jogadorSelecionado.id) {
+        jogadorData.id = jogadorSelecionado.id;
       }
 
-      this.onSubmit.emit();
+      try {
+        if (jogadorSelecionado) {
+          // CORREÇÃO: Passar apenas 1 argumento (objeto Jogador completo)
+          this.playerService.atualizarJogador(jogadorData);
+        } else {
+          this.playerService.adicionarJogador(jogadorData);
+        }
+
+        this.isSubmitting.set(false);
+        this.onSubmit.emit();
+
+        // Limpar seleção após salvar
+        this.playerService.limparSelecao();
+
+      } catch (error: any) {
+        this.isSubmitting.set(false);
+        console.error('Erro ao salvar jogador:', error);
+        alert('Erro ao salvar jogador: ' + (error.error?.mensagem || error.message));
+      }
     } else {
       this.markAllFieldsAsTouched();
     }
   }
 
-  // Método para cancelar
   onCancelForm(): void {
     this.form.reset({
       nome: '',
       email: '',
       telefone: '',
-      codinome: '',
-      tipoGrupo: TipoGrupo.LIGA_JUSTICA
+      tipoGrupo: TipoGrupo.LIGA_DA_JUSTICA
     });
+
+    // Limpar seleção ao cancelar
+    this.playerService.limparSelecao();
     this.onCancel.emit();
   }
 
-  // Método para marcar todos os campos como tocados (para mostrar erros)
   private markAllFieldsAsTouched(): void {
     Object.keys(this.form.controls).forEach(key => {
       this.form.get(key)?.markAsTouched();
     });
   }
 
-  // Método para obter mensagem de erro
   getErrorMessage(field: string): string {
     const control = this.form.get(field);
     if (control?.errors && control.touched) {
@@ -132,19 +137,16 @@ export class PlayerForm implements OnInit {
     return '';
   }
 
-  // Método para obter label do campo
   private getFieldLabel(field: string): string {
     const labels: { [key: string]: string } = {
       nome: 'Nome',
       email: 'Email',
       telefone: 'Telefone',
-      codinome: 'Codinome',
       tipoGrupo: 'Grupo'
     };
-    return labels[field] || field;
+    return labels[field] || field.charAt(0).toUpperCase() + field.slice(1);
   }
 
-  // Método para verificar se campo tem erro
   hasError(field: string): boolean {
     const control = this.form.get(field);
     return !!(control?.errors && control.touched);

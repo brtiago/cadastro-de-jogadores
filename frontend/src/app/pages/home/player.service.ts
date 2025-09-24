@@ -22,28 +22,6 @@ export class PlayerService {
   private readonly apiUrl = 'http://localhost:8080/api/v1/jogadores';
 
   private readonly jogadores = signal<Jogador[]>([]);
-    /** Mock data
-    // Signals para gerenciar estado
-      private readonly jogadores = signal<Jogador[]>(
-    [{
-      id: 1,
-      nome: 'João Silva',
-      email: 'joao@email.com',
-      telefone: '(11) 99999-9999',
-      codinome: 'Batman',
-      tipoGrupo: TipoGrupo.LIGA_JUSTICA
-      },
-      {
-      id: 2,
-      nome: 'Maria Santos',
-      email: 'maria@email.com',
-      telefone: '(11) 88888-8888',
-      codinome: 'Flash',
-     tipoGrupo: TipoGrupo.VINGADORES
-      }
-    ]);
-     */
-
   private readonly jogadorSelecionado = signal<Jogador | null>(null);
   private readonly proximoId = signal(3);
 
